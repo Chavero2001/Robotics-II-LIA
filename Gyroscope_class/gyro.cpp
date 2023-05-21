@@ -1,28 +1,27 @@
-#include "gyro.h"
+#include "gyro.h" //Include header file
 
-AcGyro::AcGyro (int baud){
+AcGyro::AcGyro (int baud){ //Assign the baud value for the serial communication
  _baud=baud;
 };
 
-void AcGyro::initMPU(){
-
-Serial.begin(_baud);
+void AcGyro::initMPU(){ //Method to init sensor
+ 
+Serial.begin(_baud); //Initialize serial communication
   while (!Serial)
-    //delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
-  Serial.println("Adafruit MPU6050 test!");
+  Serial.println("Adafruit MPU6050 test!"); //Print at the start 
 
-  // Try to initialize!
-  if (!mpu.begin(0x69)) {
-    Serial.println("Failed to find MPU6050 chip");
+  // Try to initialize
+  if (!mpu.begin(0x69)) { //If there is no communication the serial monitor will indicate it
+    Serial.println("Failed to find MPU6050 chip"); 
     while (1) {
       delay(10);
     }
   }
-  Serial.println("MPU6050 Found!");
+  Serial.println("MPU6050 Found!"); //The serial monitor will notify if the sensor was found
 
-  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-  Serial.print("Accelerometer range set to: ");
+  mpu.setAccelerometerRange(MPU6050_RANGE_8_G); 
+  Serial.print("Accelerometer range set to: "); //Print the range of the sensor for acceleration
   switch (mpu.getAccelerometerRange()) {
   case MPU6050_RANGE_2_G:
     Serial.println("+-2G");
@@ -37,7 +36,7 @@ Serial.begin(_baud);
     Serial.println("+-16G");
     break;
   }
-  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG); //Print the range of the sensor for rotation
   Serial.print("Gyro range set to: ");
   switch (mpu.getGyroRange()) {
   case MPU6050_RANGE_250_DEG:
@@ -55,7 +54,7 @@ Serial.begin(_baud);
   }
 
   mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
-  Serial.print("Filter bandwidth set to: ");
+  Serial.print("Filter bandwidth set to: "); //Print the filter of the sensor
   switch (mpu.getFilterBandwidth()) {
   case MPU6050_BAND_260_HZ:
     Serial.println("260 Hz");
@@ -80,109 +79,96 @@ Serial.begin(_baud);
     break;
   }
   Serial.println("");
-  //delay(100);
+  
 };
 
-float AcGyro::readAccelerationX(){
-  /* Get new sensor events with the readings */
+float AcGyro::readAccelerationX(){ //method to get acceleration in x
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
-  float AccelerationX=a.acceleration.x; 
-  unsigned long previousMillis = 0;  // will store last time LED was updated
-  const long interval = 500;  
+  mpu.getEvent(&a, &g, &temp); //Get the event for all the variables of the sensor
+  float AccelerationX=a.acceleration.x;   //Save the value for acceleration
+  unsigned long previousMillis = 0;  // Millis function to avoid using a delay 
+  const long interval = 500;   //Delay of 500 milliseconds
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
     previousMillis = currentMillis;
-    return AccelerationX;
+    return AccelerationX; //return acceleration on X 
   }
 };
 
-float AcGyro::readAccelerationY(){
-  /* Get new sensor events with the readings */
+float AcGyro::readAccelerationY(){ //method to get acceleration in y
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
-  float AccelerationX=a.acceleration.y; 
-  unsigned long previousMillis = 0;  // will store last time LED was updated
-  const long interval = 500;  
+  mpu.getEvent(&a, &g, &temp); //Get the event for all the variables of the sensor
+  float AccelerationX=a.acceleration.y;   //Save the value for acceleration
+  unsigned long previousMillis = 0;  
+  const long interval = 500;  //Delay of 500 milliseconds
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
     previousMillis = currentMillis;
-    return AccelerationX;
+    return AccelerationX; //return acceleration on y 
+    //Despite the name of the variable says Acceleration X, it doesn't affect, as the value is savinf and retunning is acceleration in Y
   }
 };
 
-float AcGyro::readAccelerationZ(){
-  /* Get new sensor events with the readings */
+float AcGyro::readAccelerationZ(){ //method to get acceleration in z
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
-  float AccelerationX=a.acceleration.z; 
-  unsigned long previousMillis = 0;  // will store last time LED was updated
-  const long interval = 500;  
+  mpu.getEvent(&a, &g, &temp); //Get the event for all the variables of the sensor
+  float AccelerationX=a.acceleration.z; //Save the value for acceleration
+  unsigned long previousMillis = 0;  
+  const long interval = 500;  //Delay of 500 milliseconds
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
     previousMillis = currentMillis;
-    return AccelerationX;
+    return AccelerationX; //return acceleration on z
   }
 };
 
-float AcGyro::readGyroX(){
-  /* Get new sensor events with the readings */
+float AcGyro::readGyroX(){ //method to get rotation in x
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
+  mpu.getEvent(&a, &g, &temp); //Get the event for all the variables of the sensor
   float value=g.gyro.x; 
-  unsigned long previousMillis = 0;  // will store last time LED was updated
-  const long interval = 500;  
+  unsigned long previousMillis = 0;
+  const long interval = 500;   //delay
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
     previousMillis = currentMillis;
     return value;
   }
 };
 
-float AcGyro::readGyroY(){
-  /* Get new sensor events with the readings */
+float AcGyro::readGyroY(){ //method to get rotation in y
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
+  mpu.getEvent(&a, &g, &temp); //Get the event for all the variables of the sensor
   float value=g.gyro.y; 
-  unsigned long previousMillis = 0;  // will store last time LED was updated
-  const long interval = 500;  
+  unsigned long previousMillis = 0; 
+  const long interval = 500;  //delay
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
     previousMillis = currentMillis;
     return value;
   }
 };
 
-float AcGyro::readGyroZ(){
-  /* Get new sensor events with the readings */
+float AcGyro::readGyroZ(){ //method to get rotation in z
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
+  mpu.getEvent(&a, &g, &temp); //Get the event for all the variables of the sensor
   float value=g.gyro.z; 
-  unsigned long previousMillis = 0;  // will store last time LED was updated
-  const long interval = 500;  
+  unsigned long previousMillis = 0;  
+  const long interval = 500;   //delay
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
     previousMillis = currentMillis;
     return value;
   }
 };
 
-float AcGyro::readTemp(){
-  /* Get new sensor events with the readings */
+float AcGyro::readTemp(){ //method to get temperature
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
-  float value=temp.temperature; 
-  unsigned long previousMillis = 0;  // will store last time LED was updated
-  const long interval = 500;  
+  mpu.getEvent(&a, &g, &temp); //Get the event for all the variables of the sensor
+  float value=temp.temperature;  //only save temperature 
+  unsigned long previousMillis = 0;  
+  const long interval = 500;   //delay 
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
     previousMillis = currentMillis;
     return value;
   }
